@@ -1,1 +1,229 @@
-# booking-monitoring-game
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Monitoring</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+    }
+
+    header {
+      background: #111827;
+      color: white;
+      padding: 20px;
+    }
+
+    header h1 {
+      margin: 0;
+    }
+
+    .dashboard {
+      padding: 20px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      min-width: 150px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .table-container {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1800px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      background: #e5e7eb;
+    }
+
+    button {
+      padding: 7px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .checkin {
+      background: #2563eb;
+      color: white;
+    }
+
+    .arrived {
+      background: #16a34a;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🚚 Booking Monitoring System</h1>
+  <p>Live Booking & Arrival Monitoring</p>
+</header>
+
+<div class="dashboard">
+
+  <div class="stats">
+
+    <div class="card">
+      <p>Total Booking</p>
+      <h2 id="totalBooking">0</h2>
+    </div>
+
+    <div class="card">
+      <p>Pending</p>
+      <h2 id="pending">0</h2>
+    </div>
+
+    <div class="card">
+      <p>Arrived</p>
+      <h2 id="arrived">0</h2>
+    </div>
+
+  </div>
+
+  <div class="table-container">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Registration ID</th>
+          <th>Check In</th>
+          <th>Agency ID - Name</th>
+          <th>Linehaul Route</th>
+          <th>Actual LH Route</th>
+          <th>Standby Time</th>
+          <th>Onsite Arrival Time</th>
+          <th>Vehicle Type</th>
+          <th>Vehicle Plate Number</th>
+          <th>Driver ID - Name</th>
+          <th>Helper</th>
+          <th>Registration Time</th>
+          <th>LH Trip Number</th>
+          <th>Booking Type</th>
+          <th>Tag</th>
+          <th>Booking ID</th>
+          <th>Creator</th>
+          <th>Check-in/No show Operator</th>
+          <th>Arrival Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody id="bookingTable">
+
+        <tr>
+          <td>REG-001</td>
+          <td>YES</td>
+          <td>AG001 - Sample Agency</td>
+          <td>MANILA → SOC6</td>
+          <td>MANILA → SOC6</td>
+          <td>20:00</td>
+          <td>-</td>
+          <td>Wing Van</td>
+          <td>ABC-1234</td>
+          <td>D001 - Juan Dela Cruz</td>
+          <td>1</td>
+          <td>19:45</td>
+          <td>LH-001</td>
+          <td>Regular</td>
+          <td>PENDING</td>
+          <td>BK-001</td>
+          <td>System</td>
+          <td>-</td>
+          <td>PENDING</td>
+          <td>
+            <button class="arrived" onclick="markArrived(this)">
+              ARRIVED
+            </button>
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+<script>
+
+function updateStats() {
+
+  const rows = document.querySelectorAll("#bookingTable tr");
+
+  let total = rows.length;
+  let arrived = 0;
+  let pending = 0;
+
+  rows.forEach(row => {
+
+    const status = row.cells[18].innerText;
+
+    if (status === "ARRIVED") {
+      arrived++;
+    } else {
+      pending++;
+    }
+
+  });
+
+  document.getElementById("totalBooking").innerText = total;
+  document.getElementById("pending").innerText = pending;
+  document.getElementById("arrived").innerText = arrived;
+}
+
+function markArrived(button) {
+
+  const row = button.closest("tr");
+
+  row.cells[6].innerText = new Date().toLocaleTimeString();
+  row.cells[14].innerText = "ARRIVED";
+  row.cells[18].innerText = "ARRIVED";
+  row.cells[19].innerHTML = "✅ ARRIVED";
+
+  updateStats();
+}
+
+updateStats();
+
+</script>
+
+</body>
+</html>
